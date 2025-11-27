@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# Based on: https://docs.microsoft.com/en-us/dotnet/devops/dotnet-test-github-action
+
+name: Build
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+      fail-fast: true
+    
+    name: Build ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v5
+    
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore
+      run: dotnet restore src/Chip-8.slnx --verbosity minimal
+    
+    - name: Build
+      run: dotnet build src/Chip-8.slnx --configuration Release --no-restore --verbosity minimal
+
+    - name: Test
+      run: dotnet test src/Chip-8.slnx --no-restore --verbosity minimal

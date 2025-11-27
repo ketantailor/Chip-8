@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Chip-8.Core.Tests/Chip-8.Core.Tests.csproj" />
+  <Project Path="Chip-8.Core/Chip-8.Core.csproj" />
+  <Project Path="Chip-8.RaylibApp/Chip-8.RaylibApp.csproj" />
+</Solution>
