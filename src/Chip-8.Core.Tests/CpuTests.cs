@@ -151,4 +151,32 @@ public class CpuTests
 
         ClassicAssert.AreEqual(0x0123, cpu.I);
     }
+
+    [Test]
+    public void Step_DecrementsDelayTimer()
+    {
+        var cpu = new Cpu();
+
+        cpu.DelayTimer = 5;
+
+        cpu.Step();
+        ClassicAssert.AreEqual(4, cpu.DelayTimer);
+
+        cpu.Step();
+        ClassicAssert.AreEqual(3, cpu.DelayTimer);
+    }
+
+    [Test]
+    public void Step_DecrementsSoundTimer()
+    {
+        var cpu = new Cpu();
+
+        cpu.SoundTimer = 15;
+
+        cpu.Step();
+        ClassicAssert.AreEqual(14, cpu.SoundTimer);
+
+        cpu.Step();
+        ClassicAssert.AreEqual(13, cpu.SoundTimer);
+    }
 }

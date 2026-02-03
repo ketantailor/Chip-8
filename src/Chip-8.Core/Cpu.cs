@@ -90,6 +90,16 @@ public class Cpu
                 SetIndexRegister(nnn);
                 break;
         }
+
+        if (DelayTimer > 0)
+        {
+            DelayTimer--;
+        }
+
+        if (SoundTimer > 0)
+        {
+            SoundTimer--;
+        }
     }
 
     /// <summary>
