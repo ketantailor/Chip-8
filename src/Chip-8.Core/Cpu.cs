@@ -154,9 +154,17 @@ public class Cpu
         }
         builder.AppendLine();
 
-        builder.Append("Memory: ");
-        builder.Append(Convert.ToHexString(Memory));
-        builder.AppendLine();
+        builder.AppendLine("Memory: ");
+        for (var a = 0; a < Memory.Length; a++)
+        {
+            if (a % 32 == 0)
+            {
+                builder.Append($"{a:0000} ");
+                builder.Append($"{a:X3}: ");
+            }
+            builder.Append($"{Memory[a]:X2} ");
+            if (a % 32 == 31) builder.AppendLine();
+        }
 
         return builder.ToString();
     }
