@@ -7,7 +7,7 @@ using System.Text;
 /// <remarks>
 /// Based on Guide to making a CHIP-8 emulator by Tobias V. I. Langhoff (https://tobiasvl.github.io/blog/write-a-chip-8-emulator/)
 /// </remarks>
-internal class Cpu
+public class Cpu
 {
     private const int MemorySize = 4096;
     private const int DisplayWidth = 64;
