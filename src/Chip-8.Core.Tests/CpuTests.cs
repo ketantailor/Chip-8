@@ -14,4 +14,27 @@ public class CpuTests
         ClassicAssert.AreEqual(0x0, cpu.I);
         ClassicAssert.AreEqual(0, cpu.Stack.Count);
     }
+
+    [Test]
+    public void LoadFont_WithInvalidFont_ThrowsException()
+    {
+        var cpu = new Cpu();
+
+        ClassicAssert.Throws<ArgumentException>(() =>
+        {
+            cpu.LoadFont(Array.Empty<byte>());
+        });
+    }
+
+    [Test]
+    public void LoadFont_WithValidFont_SetsMemoryCorrectly()
+    {
+        var cpu = new Cpu();
+
+        cpu.LoadFont(Fonts.F1);
+
+        ClassicAssert.AreEqual(Fonts.F1[0], cpu.Memory[0]);
+        ClassicAssert.AreEqual(Fonts.F1[79], cpu.Memory[79]);
+    }
+
 }

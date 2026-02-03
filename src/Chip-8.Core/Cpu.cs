@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+/// <remarks>
+/// Based on Guide to making a CHIP-8 emulator by Tobias V. I. Langhoff (https://tobiasvl.github.io/blog/write-a-chip-8-emulator/)
+/// </remarks>
 internal class Cpu
 {
     private const int MemorySize = 4096;
     private const int DisplayWidth = 64;
     private const int DisplayHeight = 32;
-
 
     /// <summary>Program counter, points to the current instruction in memory.</summary>
     public ushort PC { get; set; }
@@ -39,6 +41,17 @@ internal class Cpu
         I = 0;
     }
 
+    /// <summary>
+    /// Load font data into memory.
+    /// </summary>
+    /// <param name="font">The font data</param>
+    /// <exception cref="ArgumentException">Unexpected data length</exception>
+    public void LoadFont(byte[] font)
+    {
+        if (font?.Length != 80) throw new ArgumentException($"Font data should be 80 bytes, received {font?.Length}.", nameof(font));
+        font.CopyTo(Memory, 0x0);
+    }
+
     public override string ToString()
     {
         var builder = new StringBuilder();
@@ -60,4 +73,4 @@ internal class Cpu
         return builder.ToString();
     }
 
-}
+}
