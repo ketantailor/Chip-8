@@ -36,8 +36,21 @@ public class CpuTests
 
         cpu.LoadFont(Fonts.F1);
 
-        ClassicAssert.AreEqual(Fonts.F1[0x0], cpu.Memory[0x050]);
+        ClassicAssert.AreEqual(Fonts.F1[0x00], cpu.Memory[0x050]);
         ClassicAssert.AreEqual(Fonts.F1[0x4F], cpu.Memory[0x09F]);
+    }
+
+    [Test]
+    public void Step_WithInvalidCounter_ThrowsException()
+    {
+        var cpu = new Cpu();
+
+        cpu.PC = 0x1000;
+
+        ClassicAssert.Throws<InvalidOperationException>(() =>
+        {
+            cpu.Step();
+        });
     }
 
 

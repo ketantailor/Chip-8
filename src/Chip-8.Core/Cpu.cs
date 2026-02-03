@@ -52,11 +52,14 @@ public class Cpu
     public void LoadFont(byte[] font)
     {
         if (font?.Length != 80) throw new ArgumentException($"Font data should be 80 bytes, received {font?.Length}.", nameof(font));
-        font.CopyTo(Memory, 0x050);
+        Array.Copy(font, 0, Memory, 0x050, font.Length);
     }
 
     public void Step()
     {
+        // Ensure we have at least two bytes to fetch an opcode
+        if (PC >= Memory.Length - 1) throw new InvalidOperationException($"PC (0x{PC:X4}) is out of memory bounds.");
+
         OpCode = (ushort)(Memory[PC] << 8 | Memory[PC + 1]);
         PC += 2;
 
@@ -136,14 +139,13 @@ public class Cpu
         I = nnn;
     }
 
-
     [ExcludeFromCodeCoverage]
     public override string ToString()
     {
         var builder = new StringBuilder();
 
-        builder.Append($"PC={PC.ToString("X2")}, ");
-        builder.Append($"IR={PC.ToString("X2")}");
+        builder.Append($"PC={PC.ToString("X4")}, ");
+        builder.Append($"IR={I.ToString("X4")}");
         builder.AppendLine();
 
         for (var i = 0; i < V.Length; i++)
@@ -158,5 +160,4 @@ public class Cpu
 
         return builder.ToString();
     }
-
 }
