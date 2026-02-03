@@ -33,8 +33,8 @@ public class CpuTests
 
         cpu.LoadFont(Fonts.F1);
 
-        ClassicAssert.AreEqual(Fonts.F1[0], cpu.Memory[0]);
-        ClassicAssert.AreEqual(Fonts.F1[79], cpu.Memory[79]);
+        ClassicAssert.AreEqual(Fonts.F1[0x0], cpu.Memory[0x050]);
+        ClassicAssert.AreEqual(Fonts.F1[0x4F], cpu.Memory[0x09F]);
     }
 
 }

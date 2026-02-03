@@ -49,7 +49,7 @@ public class Cpu
     public void LoadFont(byte[] font)
     {
         if (font?.Length != 80) throw new ArgumentException($"Font data should be 80 bytes, received {font?.Length}.", nameof(font));
-        font.CopyTo(Memory, 0x0);
+        font.CopyTo(Memory, 0x050);
     }
 
     public override string ToString()
