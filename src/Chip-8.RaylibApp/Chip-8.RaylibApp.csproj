@@ -8,4 +8,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Chip-8.Core\Chip-8.Core.csproj" />
+  </ItemGroup>
+
 </Project>

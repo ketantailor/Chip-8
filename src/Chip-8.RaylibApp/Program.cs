@@ -1,2 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿
+using Chip8.Core;
+
+var cpu = new Cpu();
+Console.WriteLine(cpu);
