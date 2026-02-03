@@ -99,5 +99,33 @@ public class CpuTests
         ClassicAssert.AreEqual(0x34, cpu.V[15]);
     }
 
+    [Test]
+    public void Execute_0x71nn_SetsPC()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0x71;
+        cpu.Memory[0x201] = 0x23;
+        cpu.V[1] = 0x05;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x28, cpu.V[1]);
+    }
+
+    [Test]
+    public void Execute_0x7Fnn_SetsPC()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0x7F;
+        cpu.Memory[0x201] = 0x23;
+        cpu.V[15] = 0xFF;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x22, cpu.V[15]);
+    }
+
     /*
 }

@@ -80,6 +80,9 @@ public class Cpu
             case 0x6000:
                 SetRegister(x, nn);
                 break;
+            case 0x7000:
+                AddToRegister(x, nn);
+                break;
         }
     }
 
@@ -108,6 +111,17 @@ public class Cpu
     private void SetRegister(byte x, byte nn)
     {
         V[x] = nn;
+    }
+
+    /// <summary>
+    /// Add to register (opcode=7XNN).
+    /// Note: The carry flag is not set if the value overflows.
+    /// </summary>
+    /// <param name="x">The register to add to</param>
+    /// <param name="nn">The value to add</param>
+    private void AddToRegister(byte x, byte nn)
+    {
+        V[x] += nn;
     }
 
 
