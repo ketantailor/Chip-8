@@ -74,6 +74,9 @@ public class Cpu
                     ClearScreen();
                 }
                 break;
+            case 0x1000:
+                JumpTo(nnn);
+                break;
         }
     }
 
@@ -83,6 +86,15 @@ public class Cpu
     private void ClearScreen()
     {
         Array.Clear(Display);
+    }
+
+    /// <summary>
+    /// Jump (opcode=1NNN).
+    /// </summary>
+    /// <param name="nnn">The location to jump to</param>
+    private void JumpTo(ushort nnn)
+    {
+        PC = nnn;
     }
 
     [ExcludeFromCodeCoverage]
