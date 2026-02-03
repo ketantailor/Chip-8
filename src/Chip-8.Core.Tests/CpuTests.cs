@@ -54,6 +54,19 @@ public class CpuTests
     }
 
     [Test]
+    public void Step_WithInvalidOperation_ThrowsException()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0xFF;
+
+        ClassicAssert.Throws<InvalidOperationException>(() =>
+        {
+            cpu.Step();
+        });
+    }
+
+    [Test]
     public void Step_0x00E0_ClearsScreen()
     {
         var cpu = new Cpu();

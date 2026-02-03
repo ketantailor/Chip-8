@@ -89,6 +89,8 @@ public class Cpu
             case 0xA000:
                 SetIndexRegister(nnn);
                 break;
+            default:
+                throw new InvalidOperationException($"Unknown opcode: {OpCode}");
         }
 
         if (DelayTimer > 0)
