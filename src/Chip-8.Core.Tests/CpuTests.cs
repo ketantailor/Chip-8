@@ -127,5 +127,16 @@ public class CpuTests
         ClassicAssert.AreEqual(0x22, cpu.V[15]);
     }
 
-    /*
+    [Test]
+    public void Execute_0xAnnn_SetsI()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0xA1;
+        cpu.Memory[0x201] = 0x23;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0123, cpu.I);
+    }
 }

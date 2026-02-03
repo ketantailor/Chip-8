@@ -83,6 +83,9 @@ public class Cpu
             case 0x7000:
                 AddToRegister(x, nn);
                 break;
+            case 0xA000:
+                SetIndexRegister(nnn);
+                break;
         }
     }
 
@@ -122,6 +125,15 @@ public class Cpu
     private void AddToRegister(byte x, byte nn)
     {
         V[x] += nn;
+    }
+
+    /// <summary>
+    /// Set Index register (opcode=ANNN).
+    /// </summary>
+    /// <param name="nnn">The value to set it to</param>
+    private void SetIndexRegister(ushort nnn)
+    {
+        I = nnn;
     }
 
 
