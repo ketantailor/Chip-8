@@ -53,9 +53,8 @@ public class CpuTests
         });
     }
 
-
     [Test]
-    public void Execute_0x00E0_ClearsScreen()
+    public void Step_0x00E0_ClearsScreen()
     {
         var cpu = new Cpu();
 
@@ -74,7 +73,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Execute_0x1nnn_SetsPC()
+    public void Step_0x1nnn_SetsPC()
     {
         var cpu = new Cpu();
 
@@ -87,7 +86,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Execute_0x61nn_SetsPC()
+    public void Step_0x61nn_SetsPC()
     {
         var cpu = new Cpu();
 
@@ -100,7 +99,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Execute_0x6Fnn_SetsPC()
+    public void Step_0x6Fnn_SetsPC()
     {
         var cpu = new Cpu();
 
@@ -113,7 +112,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Execute_0x71nn_SetsPC()
+    public void Step_0x71nn_SetsPC()
     {
         var cpu = new Cpu();
 
@@ -127,7 +126,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Execute_0x7Fnn_SetsPC()
+    public void Step_0x7Fnn_SetsPC()
     {
         var cpu = new Cpu();
 
@@ -141,7 +140,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Execute_0xAnnn_SetsI()
+    public void Step_0xAnnn_SetsI()
     {
         var cpu = new Cpu();
 
