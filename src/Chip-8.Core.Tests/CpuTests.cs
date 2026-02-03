@@ -73,5 +73,31 @@ public class CpuTests
         ClassicAssert.AreEqual(0x0123, cpu.PC);
     }
 
+    [Test]
+    public void Execute_0x61nn_SetsPC()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0x61;
+        cpu.Memory[0x201] = 0x23;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x23, cpu.V[1]);
+    }
+
+    [Test]
+    public void Execute_0x6Fnn_SetsPC()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0x6F;
+        cpu.Memory[0x201] = 0x34;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x34, cpu.V[15]);
+    }
+
     /*
 }

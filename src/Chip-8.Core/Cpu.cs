@@ -77,6 +77,9 @@ public class Cpu
             case 0x1000:
                 JumpTo(nnn);
                 break;
+            case 0x6000:
+                SetRegister(x, nn);
+                break;
         }
     }
 
@@ -96,6 +99,17 @@ public class Cpu
     {
         PC = nnn;
     }
+
+    /// <summary>
+    /// Set register (opcode=6XNN).
+    /// </summary>
+    /// <param name="x">The register to set</param>
+    /// <param name="nn">The value to set</param>
+    private void SetRegister(byte x, byte nn)
+    {
+        V[x] = nn;
+    }
+
 
     [ExcludeFromCodeCoverage]
     public override string ToString()
