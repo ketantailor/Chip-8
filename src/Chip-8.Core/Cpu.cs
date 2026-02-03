@@ -34,7 +34,7 @@ public class Cpu
     /// <summary>Current OpCode.</summary>
     public ushort OpCode { get; private set; }
 
-    public byte[,] Display { get; private set; } = new byte[DisplayWidth, DisplayHeight];
+    public byte[,] Display { get; private set; } = new byte[DisplayWidth / 8, DisplayHeight];
 
 
     public Cpu()
@@ -164,6 +164,8 @@ public class Cpu
         {
             builder.Append($"{i:00}={V[i].ToString("X2")}, ");
         }
+
+        builder.AppendLine();
         builder.AppendLine();
 
         builder.AppendLine("Memory: ");
@@ -176,6 +178,29 @@ public class Cpu
             }
             builder.Append($"{Memory[a]:X2} ");
             if (a % 32 == 31) builder.AppendLine();
+        }
+
+        builder.AppendLine();
+
+        builder.AppendLine("Display:");
+        for (var w = 0; w < DisplayWidth; w++)
+        {
+            builder.Append(w % 10);
+        }
+
+        builder.AppendLine();
+
+        for (var h = 0; h < DisplayHeight; h++)
+        {
+            for (var w = 0; w < DisplayWidth / 8; w++)
+            {
+                for (var bit = 0; bit < 8; bit++)
+                {
+                    var pixel = (Display[w, h] >> (7 - bit)) & 1;
+                    builder.Append(pixel == 0 ? "-" : "*");
+                }
+            }
+            builder.AppendLine();
         }
 
         return builder.ToString();
