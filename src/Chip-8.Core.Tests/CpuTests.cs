@@ -13,6 +13,9 @@ public class CpuTests
         ClassicAssert.AreEqual(0x0, cpu.OpCode);
         ClassicAssert.AreEqual(0x0, cpu.I);
         ClassicAssert.AreEqual(0, cpu.Stack.Count);
+        ClassicAssert.AreEqual(Cpu.MemorySize, cpu.Memory.Length);
+        ClassicAssert.AreEqual(Cpu.DisplayWidth, cpu.Display.GetLength(0));
+        ClassicAssert.AreEqual(Cpu.DisplayHeight, cpu.Display.GetLength(1));
     }
 
     [Test]
@@ -35,6 +38,26 @@ public class CpuTests
 
         ClassicAssert.AreEqual(Fonts.F1[0x0], cpu.Memory[0x050]);
         ClassicAssert.AreEqual(Fonts.F1[0x4F], cpu.Memory[0x09F]);
+    }
+
+
+    [Test]
+    public void Execute_0x00E0_ClearsScreen()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0x00;
+        cpu.Memory[0x201] = 0xE0;
+
+        cpu.Step();
+
+        for (var x = 0; x < Cpu.DisplayWidth; x++)
+        {
+            for (var y = 0; y < Cpu.DisplayHeight; y++)
+            {
+                ClassicAssert.AreEqual(0x0, cpu.Display[x, y]);
+            }
+        }
     }
 
 }

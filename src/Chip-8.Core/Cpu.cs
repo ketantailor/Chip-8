@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 /// <remarks>
@@ -9,9 +10,9 @@ using System.Text;
 /// </remarks>
 public class Cpu
 {
-    private const int MemorySize = 4096;
-    private const int DisplayWidth = 64;
-    private const int DisplayHeight = 32;
+    internal const int MemorySize = 4096;
+    internal const int DisplayWidth = 64;
+    internal const int DisplayHeight = 32;
 
     /// <summary>Program counter, points to the current instruction in memory.</summary>
     public ushort PC { get; set; }
@@ -33,6 +34,8 @@ public class Cpu
     /// <summary>Current OpCode.</summary>
     public ushort OpCode { get; private set; }
 
+    public byte[,] Display { get; private set; } = new byte[DisplayWidth, DisplayHeight];
+
 
     public Cpu()
     {
@@ -52,6 +55,37 @@ public class Cpu
         font.CopyTo(Memory, 0x050);
     }
 
+    public void Step()
+    {
+        OpCode = (ushort)(Memory[PC] << 8 | Memory[PC + 1]);
+        PC += 2;
+
+        var nnn = (ushort)(OpCode & 0x0FFF);
+        var nn = (byte)(OpCode & 0x00FF);
+        var n = (byte)(OpCode & 0x000F);
+        var x = (byte)((OpCode & 0x0F00) >> 8);
+        var y = (byte)((OpCode & 0x00F0) >> 4);
+
+        switch (OpCode & 0xF000)
+        {
+            case 0x0000:
+                if (OpCode == 0x00E0)
+                {
+                    ClearScreen();
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Clear the screen (opcode=00E0).
+    /// </summary>
+    private void ClearScreen()
+    {
+        Array.Clear(Display);
+    }
+
+    [ExcludeFromCodeCoverage]
     public override string ToString()
     {
         var builder = new StringBuilder();
