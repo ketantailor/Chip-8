@@ -161,7 +161,7 @@ public class Cpu
     /// 
     /// The interpreter reads n bytes from memory, starting at the address stored in I.These
     /// bytes are then displayed as sprites on screen at coordinates(Vx, Vy). Sprites are
-    /// XORed onto the existing screen.If this causes any pixels to be erased, VF is set to
+    /// XORed onto the existing screen. If this causes any pixels to be erased, VF is set to
     /// 1, otherwise it is set to 0. If the sprite is positioned so part of it is outside the
     /// coordinates of the display, it wraps around to the opposite side of the screen.
     /// </summary>
@@ -178,26 +178,34 @@ public class Cpu
 
         var flipped = false;    // detect collision
 
-        for (var idx = 0; idx < rows; idx++)
+        for (var row = 0; row < rows; row++)
         {
-            var spriteRow = Memory[I + idx];
+            var currentY = yc + row;
+            
+            if (currentY >= DisplayHeight)
+                break;
+
+            var spriteRow = Memory[I + row];
+
             for (var bit = 0; bit < 8; bit++)
             {
-                if (xc + bit > DisplayWidth)
+                var currentX = xc + bit;
+
+                if (currentX >= DisplayWidth)
                     continue;
 
                 var spritePixel = (spriteRow >> (7 - bit)) & 1;
                 if (spritePixel == 0) continue;
 
-                var currentPixel = Display[xc + bit, yc];
+                var currentPixel = Display[currentX, currentY];
                 if (currentPixel) flipped = true;
 
                 // flip bit at position idx
-                Display[xc + bit, yc] = !Display[xc + bit, yc];
+                Display[currentX, currentY] = !Display[currentX, currentY];
             }
         }
 
-        V[0xF] = flipped ? (byte)0 : (byte)1;
+        V[0xF] = flipped ? (byte)1 : (byte)0;
     }
 
 

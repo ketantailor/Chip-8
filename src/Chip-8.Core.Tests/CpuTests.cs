@@ -196,6 +196,38 @@ public class CpuTests
     [Test]
     public void Step_DisplaySprite()
     {
-        Assert.Ignore();
+        var cpu = new Cpu();
+
+        cpu.V[0] = 0; // x
+        cpu.V[1] = 0; // y
+        cpu.I = 0x300; // location of sprite
+
+        cpu.Memory[0x200] = 0xD0;
+        cpu.Memory[0x201] = 0x12; // display sprite at x=0, y=0, rows=1
+
+        cpu.Memory[0x300] = 0b10101010; // 0xAA
+        cpu.Memory[0x301] = 0b11110000; // 0xF0
+        
+        
+        cpu.Step();
+
+
+        ClassicAssert.IsTrue(cpu.Display[0, 0]);
+        ClassicAssert.IsFalse(cpu.Display[1, 0]);
+        ClassicAssert.IsTrue(cpu.Display[2, 0]);
+        ClassicAssert.IsFalse(cpu.Display[3, 0]);
+        ClassicAssert.IsTrue(cpu.Display[4, 0]);
+        ClassicAssert.IsFalse(cpu.Display[5, 0]);
+        ClassicAssert.IsTrue(cpu.Display[6, 0]);
+        ClassicAssert.IsFalse(cpu.Display[7, 0]);
+
+        ClassicAssert.IsTrue(cpu.Display[0, 1]);
+        ClassicAssert.IsTrue(cpu.Display[1, 1]);
+        ClassicAssert.IsTrue(cpu.Display[2, 1]);
+        ClassicAssert.IsTrue(cpu.Display[3, 1]);
+        ClassicAssert.IsFalse(cpu.Display[4, 1]);
+        ClassicAssert.IsFalse(cpu.Display[5, 1]);
+        ClassicAssert.IsFalse(cpu.Display[6, 1]);
+        ClassicAssert.IsFalse(cpu.Display[7, 1]);
     }
 }
