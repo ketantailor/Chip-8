@@ -1,4 +1,4 @@
-﻿namespace Chip8.Core;
+namespace Chip8.Core;
 
 using System;
 using System.Collections.Generic;
@@ -109,7 +109,6 @@ public class Cpu
     /// </summary>
     private void ClearDisplay()
     {
-        Trace.WriteLine($"Cpu: {PC:X4} {OpCode:X4} ClearDisplay()");
         Array.Clear(Display);
     }
 
