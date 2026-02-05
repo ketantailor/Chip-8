@@ -80,7 +80,7 @@ public class CpuTests
         {
             for (var y = 0; y < Cpu.DisplayHeight; y++)
             {
-                ClassicAssert.AreEqual(0x0, cpu.Display[x, y]);
+                ClassicAssert.IsFalse(cpu.Display[x, y]);
             }
         }
     }
@@ -191,5 +191,11 @@ public class CpuTests
 
         cpu.Step();
         ClassicAssert.AreEqual(13, cpu.SoundTimer);
+    }
+
+    [Test]
+    public void Step_DisplaySprite()
+    {
+        Assert.Ignore();
     }
 }

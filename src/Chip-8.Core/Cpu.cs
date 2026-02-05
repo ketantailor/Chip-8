@@ -34,7 +34,7 @@ public class Cpu
     /// <summary>Current OpCode.</summary>
     public ushort OpCode { get; private set; }
 
-    public byte[,] Display { get; private set; } = new byte[DisplayWidth / 8, DisplayHeight];
+    public bool[,] Display { get; private set; } = new bool[DisplayWidth, DisplayHeight];
 
 
     public Cpu()
@@ -88,6 +88,9 @@ public class Cpu
                 break;
             case 0xA000:
                 SetIndexRegister(nnn);
+                break;
+            case 0xD000:
+                DisplaySprite(x, y, n);
                 break;
             default:
                 throw new InvalidOperationException($"Unknown opcode: {OpCode}");
@@ -151,6 +154,53 @@ public class Cpu
         I = nnn;
     }
 
+    /// <summary>
+    /// Display sprite (opcode=DXYN).
+    /// 
+    /// Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
+    /// 
+    /// The interpreter reads n bytes from memory, starting at the address stored in I.These
+    /// bytes are then displayed as sprites on screen at coordinates(Vx, Vy). Sprites are
+    /// XORed onto the existing screen.If this causes any pixels to be erased, VF is set to
+    /// 1, otherwise it is set to 0. If the sprite is positioned so part of it is outside the
+    /// coordinates of the display, it wraps around to the opposite side of the screen.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="rows"></param>
+    /// <remarks>
+    /// https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#dxyn-display
+    /// </remarks>
+    private void DisplaySprite(byte x, byte y, byte rows)
+    {
+        var xc = V[x] % DisplayWidth;   // or V[x] & 63, x coord of the display where the sprite will go
+        var yc = V[y] % DisplayHeight;  // or V[y] & 31, y coord of the display where the sprite will go
+
+        var flipped = false;    // detect collision
+
+        for (var idx = 0; idx < rows; idx++)
+        {
+            var spriteRow = Memory[I + idx];
+            for (var bit = 0; bit < 8; bit++)
+            {
+                if (xc + bit > DisplayWidth)
+                    continue;
+
+                var spritePixel = (spriteRow >> (7 - bit)) & 1;
+                if (spritePixel == 0) continue;
+
+                var currentPixel = Display[xc + bit, yc];
+                if (currentPixel) flipped = true;
+
+                // flip bit at position idx
+                Display[xc + bit, yc] = !Display[xc + bit, yc];
+            }
+        }
+
+        V[0xF] = flipped ? (byte)0 : (byte)1;
+    }
+
+
     [ExcludeFromCodeCoverage]
     public override string ToString()
     {
@@ -192,13 +242,10 @@ public class Cpu
 
         for (var h = 0; h < DisplayHeight; h++)
         {
-            for (var w = 0; w < DisplayWidth / 8; w++)
+            for (var w = 0; w < DisplayWidth; w++)
             {
-                for (var bit = 0; bit < 8; bit++)
-                {
-                    var pixel = (Display[w, h] >> (7 - bit)) & 1;
-                    builder.Append(pixel == 0 ? "-" : "*");
-                }
+                var pixel = Display[w, h];
+                builder.Append(pixel ? "#" : ".");
             }
             builder.AppendLine();
         }
