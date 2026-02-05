@@ -44,6 +44,11 @@ public class Cpu
         I = 0;
     }
 
+    public void Load(byte[] rom)
+    {
+        Array.Copy(rom, 0, Memory, 0x200, rom.Length);
+    }
+
     /// <summary>
     /// Load font data into memory.
     /// </summary>
