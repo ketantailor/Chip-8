@@ -13,9 +13,9 @@ public class CpuTests
         ClassicAssert.AreEqual(0x0, cpu.OpCode);
         ClassicAssert.AreEqual(0x0, cpu.I);
         ClassicAssert.AreEqual(0, cpu.Stack.Count);
-        ClassicAssert.AreEqual(Cpu.MemorySize, cpu.Memory.Length);
-        ClassicAssert.AreEqual(Cpu.DisplayWidth, cpu.Display.GetLength(0));
-        ClassicAssert.AreEqual(Cpu.DisplayHeight, cpu.Display.GetLength(1));
+        ClassicAssert.AreEqual(Constants.MemorySize, cpu.Memory.Length);
+        ClassicAssert.AreEqual(Constants.DisplayWidth, cpu.Display.GetLength(0));
+        ClassicAssert.AreEqual(Constants.DisplayHeight, cpu.Display.GetLength(1));
     }
 
     [Test]
@@ -58,7 +58,7 @@ public class CpuTests
     {
         var cpu = new Cpu();
 
-        cpu.Memory[0x200] = 0xFF;
+        cpu.Memory[Constants.ProgramStart] = 0xFF;
 
         ClassicAssert.Throws<InvalidOperationException>(() =>
         {
@@ -67,7 +67,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x00E0_ClearsScreen()
+    public void Step_0x00E0_ClearsDisplay()
     {
         var cpu = new Cpu();
 
@@ -76,9 +76,9 @@ public class CpuTests
 
         cpu.Step();
 
-        for (var x = 0; x < Cpu.DisplayWidth; x++)
+        for (var x = 0; x < Constants.DisplayWidth; x++)
         {
-            for (var y = 0; y < Cpu.DisplayHeight; y++)
+            for (var y = 0; y < Constants.DisplayHeight; y++)
             {
                 ClassicAssert.IsFalse(cpu.Display[x, y]);
             }
@@ -99,7 +99,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x61nn_SetsPC()
+    public void Step_0x61nn_SetsRegister()
     {
         var cpu = new Cpu();
 
@@ -112,7 +112,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x6Fnn_SetsPC()
+    public void Step_0x6Fnn_SetsRegister()
     {
         var cpu = new Cpu();
 
@@ -121,25 +121,25 @@ public class CpuTests
 
         cpu.Step();
 
-        ClassicAssert.AreEqual(0x34, cpu.V[15]);
+        ClassicAssert.AreEqual(0x34, cpu.V[0xF]);
     }
 
     [Test]
-    public void Step_0x71nn_SetsPC()
+    public void Step_0x71nn_AddsToRegister()
     {
         var cpu = new Cpu();
 
         cpu.Memory[0x200] = 0x71;
         cpu.Memory[0x201] = 0x23;
-        cpu.V[1] = 0x05;
+        cpu.V[0x1] = 0x05;
 
         cpu.Step();
 
-        ClassicAssert.AreEqual(0x28, cpu.V[1]);
+        ClassicAssert.AreEqual(0x28, cpu.V[0x1]);
     }
 
     [Test]
-    public void Step_0x7Fnn_SetsPC()
+    public void Step_0x7FnnWithOverflow_AddsToRegister()
     {
         var cpu = new Cpu();
 

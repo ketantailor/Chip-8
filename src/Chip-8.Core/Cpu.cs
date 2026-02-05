@@ -10,10 +10,6 @@ using System.Text;
 /// </remarks>
 public class Cpu
 {
-    internal const int MemorySize = 4096;
-    internal const int DisplayWidth = 64;
-    internal const int DisplayHeight = 32;
-
     /// <summary>Program counter, points to the current instruction in memory.</summary>
     public ushort PC { get; set; }
 
@@ -29,24 +25,25 @@ public class Cpu
     /// <summary>Registers</summary>
     public byte[] V { get; } = new byte[16];
 
-    public byte[] Memory { get; private set; } = new byte[MemorySize];
+    public byte[] Memory { get; private set; } = new byte[Constants.MemorySize];
 
     /// <summary>Current OpCode.</summary>
     public ushort OpCode { get; private set; }
 
-    public bool[,] Display { get; private set; } = new bool[DisplayWidth, DisplayHeight];
+    public bool[,] Display { get; private set; } = new bool[Constants.DisplayWidth, Constants.DisplayHeight];
 
 
     public Cpu()
     {
-        PC = 0x200;
+        PC = Constants.ProgramStart;
         OpCode = 0;
         I = 0;
     }
 
     public void Load(byte[] rom)
     {
-        Array.Copy(rom, 0, Memory, 0x200, rom.Length);
+        Array.Copy(rom, 0, Memory, Constants.ProgramStart, rom.Length);
+        PC = Constants.ProgramStart;
     }
 
     /// <summary>
@@ -56,13 +53,14 @@ public class Cpu
     /// <exception cref="ArgumentException">Unexpected data length</exception>
     public void LoadFont(byte[] font)
     {
-        if (font?.Length != 80) throw new ArgumentException($"Font data should be 80 bytes, received {font?.Length}.", nameof(font));
-        Array.Copy(font, 0, Memory, 0x050, font.Length);
+        if (font?.Length != Constants.FontSize)
+            throw new ArgumentException($"Font data should be {Constants.FontSize} bytes, received {font?.Length}.", nameof(font));
+        Array.Copy(font, 0, Memory, Constants.FontStart, font.Length);
     }
 
     public void Step()
     {
-        // Ensure we have at least two bytes to fetch an opcode
+        // ensure we have at least two bytes to fetch an opcode
         if (PC >= Memory.Length - 1) throw new InvalidOperationException($"PC (0x{PC:X4}) is out of memory bounds.");
 
         OpCode = (ushort)(Memory[PC] << 8 | Memory[PC + 1]);
@@ -79,7 +77,7 @@ public class Cpu
             case 0x0000:
                 if (OpCode == 0x00E0)
                 {
-                    ClearScreen();
+                    ClearDisplay();
                 }
                 break;
             case 0x1000:
@@ -101,27 +99,22 @@ public class Cpu
                 throw new InvalidOperationException($"Unknown opcode: {OpCode}");
         }
 
-        if (DelayTimer > 0)
-        {
-            DelayTimer--;
-        }
-
-        if (SoundTimer > 0)
-        {
-            SoundTimer--;
-        }
+        if (DelayTimer > 0) DelayTimer--;
+        if (SoundTimer > 0) SoundTimer--;
     }
 
+
     /// <summary>
-    /// Clear the screen (opcode=00E0).
+    /// Clear the display (opcode=00E0).
     /// </summary>
-    private void ClearScreen()
+    private void ClearDisplay()
     {
+        Trace.WriteLine($"Cpu: {PC:X4} {OpCode:X4} ClearDisplay()");
         Array.Clear(Display);
     }
 
     /// <summary>
-    /// Jump (opcode=1NNN).
+    /// Jump to location NNN (opcode=1NNN).
     /// </summary>
     /// <param name="nnn">The location to jump to</param>
     private void JumpTo(ushort nnn)
@@ -130,7 +123,7 @@ public class Cpu
     }
 
     /// <summary>
-    /// Set register (opcode=6XNN).
+    /// Set register X to NN (opcode=6XNN).
     /// </summary>
     /// <param name="x">The register to set</param>
     /// <param name="nn">The value to set</param>
@@ -140,7 +133,7 @@ public class Cpu
     }
 
     /// <summary>
-    /// Add to register (opcode=7XNN).
+    /// Adds NN to register X (opcode=7XNN).
     /// Note: The carry flag is not set if the value overflows.
     /// </summary>
     /// <param name="x">The register to add to</param>
@@ -151,7 +144,7 @@ public class Cpu
     }
 
     /// <summary>
-    /// Set Index register (opcode=ANNN).
+    /// Set Index register to NNN (opcode=ANNN).
     /// </summary>
     /// <param name="nnn">The value to set it to</param>
     private void SetIndexRegister(ushort nnn)
@@ -178,8 +171,8 @@ public class Cpu
     /// </remarks>
     private void DisplaySprite(byte x, byte y, byte rows)
     {
-        var xc = V[x] % DisplayWidth;   // or V[x] & 63, x coord of the display where the sprite will go
-        var yc = V[y] % DisplayHeight;  // or V[y] & 31, y coord of the display where the sprite will go
+        var xc = V[x] % Constants.DisplayWidth;   // or V[x] & 63, x coord of the display where the sprite will go
+        var yc = V[y] % Constants.DisplayHeight;  // or V[y] & 31, y coord of the display where the sprite will go
 
         var flipped = false;    // detect collision
 
@@ -187,7 +180,7 @@ public class Cpu
         {
             var currentY = yc + row;
             
-            if (currentY >= DisplayHeight)
+            if (currentY >= Constants.DisplayHeight)
                 break;
 
             var spriteRow = Memory[I + row];
@@ -196,7 +189,7 @@ public class Cpu
             {
                 var currentX = xc + bit;
 
-                if (currentX >= DisplayWidth)
+                if (currentX >= Constants.DisplayWidth)
                     continue;
 
                 var spritePixel = (spriteRow >> (7 - bit)) & 1;
@@ -246,16 +239,16 @@ public class Cpu
         builder.AppendLine();
 
         builder.AppendLine("Display:");
-        for (var w = 0; w < DisplayWidth; w++)
+        for (var w = 0; w < Constants.DisplayWidth; w++)
         {
             builder.Append(w % 10);
         }
 
         builder.AppendLine();
 
-        for (var h = 0; h < DisplayHeight; h++)
+        for (var h = 0; h < Constants.DisplayHeight; h++)
         {
-            for (var w = 0; w < DisplayWidth; w++)
+            for (var w = 0; w < Constants.DisplayWidth; w++)
             {
                 var pixel = Display[w, h];
                 builder.Append(pixel ? "#" : ".");
