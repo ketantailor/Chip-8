@@ -5,3 +5,20 @@
 Chip-8 emulator/interpreter in C#.
 
 Based on [Guide to making a CHIP-8 emulator](https://tobiasvl.github.io/blog/write-a-chip-8-emulator/).
+
+## Tests Passing
+
+Test | Status
+---- | ------
+[Chip-8 Splash Screen](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#chip-8-splash-screen) | 👍
+[IBM Logo](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#ibm-logo) | 👍
+[Corax+ Opcode Test](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#corax-opcode-test) | 
+[Flags Test](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#flags-test) | 
+[Quirks Test](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#quirks-test) | 
+[Keypad Test](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#keypad-test) | 
+[Beep Test](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#beep-test) | 
+
+## Useful Links
+
+- [Cowgod's Chip-8 Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM)
+- [Chip-8 Test Suite](https://github.com/Timendus/chip8-test-suite)
