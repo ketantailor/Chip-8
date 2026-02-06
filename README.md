@@ -16,7 +16,7 @@ dotnet run --project src/Chip-8.RaylibApp --configuration Release -- roms/2-ibm-
 ## Tests Passing
 
 Test | Status
----- | ------
+---- | :----:
 [Chip-8 Splash Screen](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#chip-8-splash-screen) | 👍
 [IBM Logo](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#ibm-logo) | 👍
 [Corax+ Opcode Test](https://github.com/Timendus/chip8-test-suite/tree/main?tab=readme-ov-file#corax-opcode-test) | 
