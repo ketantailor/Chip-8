@@ -31,6 +31,7 @@ public class Cpu
     public ushort OpCode { get; private set; }
 
     public bool[,] Display { get; private set; } = new bool[Constants.DisplayWidth, Constants.DisplayHeight];
+    public bool DisplayUpdated = false;
 
 
     public Cpu()
@@ -62,6 +63,8 @@ public class Cpu
     {
         // ensure we have at least two bytes to fetch an opcode
         if (PC >= Memory.Length - 1) throw new InvalidOperationException($"PC (0x{PC:X4}) is out of memory bounds.");
+
+        DisplayUpdated = false;
 
         OpCode = (ushort)(Memory[PC] << 8 | Memory[PC + 1]);
         PC += 2;
@@ -110,6 +113,7 @@ public class Cpu
     private void ClearDisplay()
     {
         Array.Clear(Display);
+        DisplayUpdated = true;
     }
 
     /// <summary>
@@ -203,6 +207,8 @@ public class Cpu
         }
 
         V[0xF] = flipped ? (byte)1 : (byte)0;
+
+        DisplayUpdated = true;
     }
 
 
