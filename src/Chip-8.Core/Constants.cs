@@ -1,11 +1,11 @@
 ﻿namespace Chip8.Core;
 
-internal static class Constants
+public static class Constants
 {
     internal const int MemorySize = 0x1000;
 
-    internal const int DisplayWidth = 64;
-    internal const int DisplayHeight = 32;
+    public const int DisplayWidth = 64;
+    public const int DisplayHeight = 32;
 
     internal const int ProgramStart = 0x200;
 
