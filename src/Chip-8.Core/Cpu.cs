@@ -108,6 +108,16 @@ public class Cpu
             case 0x7000:
                 AddToRegister(x, nn);
                 break;
+            case 0x8000:
+                switch(n)
+                {
+                    case 0x0:
+                        CopyToRegister(x, y);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unknown opcode: {OpCode:x}");
+                }
+                break;
             case 0x9000:
                 SkipIfRegistersNotEqual(x, y);
                 break;
@@ -226,6 +236,16 @@ public class Cpu
     private void AddToRegister(byte x, byte nn)
     {
         V[x] += nn;
+    }
+
+    /// <summary>
+    /// Copy VY to VX (opcode=8XY0).
+    /// </summary>
+    /// <param name="x">The register to copy to</param>
+    /// <param name="y">The register to copy from</param>
+    private void CopyToRegister(byte x, byte y)
+    {
+        V[x] = V[y];
     }
 
     /// <summary>

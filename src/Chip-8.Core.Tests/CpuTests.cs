@@ -208,38 +208,6 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x9xy0_SkipsWhenNotEqual()
-    {
-        var cpu = new Cpu();
-
-        cpu.V[5] = 0x99;
-        cpu.V[6] = 0x98;
-
-        cpu.Memory[0x200] = 0x95;
-        cpu.Memory[0x201] = 0x60;
-
-        cpu.Step();
-
-        ClassicAssert.AreEqual(0x0204, cpu.PC);
-    }
-
-    [Test]
-    public void Set_0x9xy0_ContinuesWhenEqual()
-    {
-        var cpu = new Cpu();
-
-        cpu.V[7] = 0x99;
-        cpu.V[8] = 0x99;
-
-        cpu.Memory[0x200] = 0x97;
-        cpu.Memory[0x201] = 0x80;
-
-        cpu.Step();
-
-        ClassicAssert.AreEqual(0x0202, cpu.PC);
-    }
-
-    [Test]
     public void Step_0x61nn_SetsRegister()
     {
         var cpu = new Cpu();
@@ -291,6 +259,65 @@ public class CpuTests
         cpu.Step();
 
         ClassicAssert.AreEqual(0x22, cpu.V[15]);
+    }
+
+    [Test]
+    public void Step_0x8xy0_CopiesToRegister()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0x99;
+        cpu.V[2] = 0x98;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x20;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x98, cpu.V[1]);
+    }
+
+    [Test]
+    public void Step_0x8F00_ThrowsException()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0x80;
+        cpu.Memory[0x201] = 0x0F;
+
+        Assert.Throws<InvalidOperationException>(cpu.Step);
+    }
+
+    [Test]
+    public void Set_0x9xy0_SkipsWhenNotEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[5] = 0x99;
+        cpu.V[6] = 0x98;
+
+        cpu.Memory[0x200] = 0x95;
+        cpu.Memory[0x201] = 0x60;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0204, cpu.PC);
+    }
+
+    [Test]
+    public void Set_0x9xy0_ContinuesWhenEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[7] = 0x99;
+        cpu.V[8] = 0x99;
+
+        cpu.Memory[0x200] = 0x97;
+        cpu.Memory[0x201] = 0x80;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0202, cpu.PC);
     }
 
     [Test]
