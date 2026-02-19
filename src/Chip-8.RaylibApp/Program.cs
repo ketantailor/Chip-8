@@ -1,8 +1,12 @@
 ﻿using Chip8.Core;
 using Raylib_cs;
 
+const int CpuFreq = 720;    // Hz
+const int TimerFreq = 60;   // Hz
+
 const int TargetFPS = 60;
-const int StepsPerFrame = 12; // ~700 instructions/second at 60 FPS
+const int CpuStepsPerFrame = CpuFreq / TargetFPS;   // 12 steps per frame
+const int TimerStepsPerFrame = TimerFreq / TargetFPS;
 const int Scale = 10;
 
 Color CharcoalGray = new Color(0x36, 0x45, 0x4F);
@@ -60,7 +64,7 @@ void RunEmulator(string romPath)
 
     while (!Raylib.WindowShouldClose())
     {
-        for (var i = 0; i < StepsPerFrame; i++)
+        for (var i = 0; i < CpuStepsPerFrame; i++)
             cpu.Step();
 
         Raylib.BeginDrawing();
