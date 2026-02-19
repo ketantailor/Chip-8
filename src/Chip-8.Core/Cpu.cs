@@ -82,9 +82,16 @@ public class Cpu
                 {
                     ClearDisplay();
                 }
+                if (OpCode == 0x00EE)
+                {
+                    PopFromStack();
+                }
                 break;
             case 0x1000:
                 JumpTo(nnn);
+                break;
+            case 0x2000:
+                CallSubroutine(nnn);
                 break;
             case 0x6000:
                 SetRegister(x, nn);
@@ -99,7 +106,7 @@ public class Cpu
                 DisplaySprite(x, y, n);
                 break;
             default:
-                throw new InvalidOperationException($"Unknown opcode: {OpCode}");
+                throw new InvalidOperationException($"Unknown opcode: {OpCode:x}");
         }
 
         if (DelayTimer > 0) DelayTimer--;
@@ -117,11 +124,30 @@ public class Cpu
     }
 
     /// <summary>
+    /// Pop from stack, exit a subroutine (opcode=00EE).
+    /// </summary>
+    private void PopFromStack()
+    {
+        var pc = Stack.Pop();
+        JumpTo(pc);
+    }
+
+    /// <summary>
     /// Jump to location NNN (opcode=1NNN).
     /// </summary>
     /// <param name="nnn">The location to jump to</param>
     private void JumpTo(ushort nnn)
     {
+        PC = nnn;
+    }
+
+    /// <summary>
+    /// Call subroutine at location NNN (opcode=2NNN).
+    /// </summary>
+    /// <param name="nnn">The location to jump to</param>
+    private void CallSubroutine(ushort nnn)
+    {
+        Stack.Push(PC);
         PC = nnn;
     }
 

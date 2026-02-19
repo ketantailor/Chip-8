@@ -99,6 +99,23 @@ public class CpuTests
     }
 
     [Test]
+    public void Set_0x2nnnn_CallsSubroutineAndReturns()
+    {
+        var cpu = new Cpu();
+
+        cpu.Memory[0x200] = 0x23;
+        cpu.Memory[0x201] = 0x98;
+        cpu.Memory[0x398] = 0x00;
+        cpu.Memory[0x399] = 0xEE;
+
+        cpu.Step();
+        ClassicAssert.AreEqual(0x0398, cpu.PC);
+
+        cpu.Step();
+        ClassicAssert.AreEqual(0x0202, cpu.PC);
+    }
+
+    [Test]
     public void Step_0x61nn_SetsRegister()
     {
         var cpu = new Cpu();
