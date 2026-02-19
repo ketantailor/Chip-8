@@ -93,11 +93,23 @@ public class Cpu
             case 0x2000:
                 CallSubroutine(nnn);
                 break;
+            case 0x3000:
+                SkipIfEqual(x, nn);
+                break;
+            case 0x4000:
+                SkipIfNotEqual(x, nn);
+                break;
+            case 0x5000:
+                SkipIfRegistersEqual(x, y);
+                break;
             case 0x6000:
                 SetRegister(x, nn);
                 break;
             case 0x7000:
                 AddToRegister(x, nn);
+                break;
+            case 0x9000:
+                SkipIfRegistersNotEqual(x, y);
                 break;
             case 0xA000:
                 SetIndexRegister(nnn);
@@ -149,6 +161,50 @@ public class Cpu
     {
         Stack.Push(PC);
         PC = nnn;
+    }
+
+    /// <summary>
+    /// Skip if VX is equal to NN (opcode=3XNN).
+    /// </summary>
+    /// <param name="x">The register to compare with</param>
+    /// <param name="nn">The value to compare</param>
+    private void SkipIfEqual(byte x, byte nn)
+    {
+        if (V[x] == nn)
+            PC += 2;
+    }
+
+    /// <summary>
+    /// Skip if VX is not equal to NN (opcode=4XNN).
+    /// </summary>
+    /// <param name="x">The register to compare with</param>
+    /// <param name="nn">The value to compare</param>
+    private void SkipIfNotEqual(byte x, byte nn)
+    {
+        if (V[x] != nn)
+            PC += 2;
+    }
+
+    /// <summary>
+    /// Skip if VX is equal to VY (opcode=5XY0).
+    /// </summary>
+    /// <param name="x">The first register to compare</param>
+    /// <param name="y">The second register to compare</param>
+    private void SkipIfRegistersEqual(byte x, byte y)
+    {
+        if (V[x] == V[y])
+            PC += 2;
+    }
+
+    /// <summary>
+    /// Skip if VX is not equal to VY (opcode=9XY0).
+    /// </summary>
+    /// <param name="x">The first register to compare</param>
+    /// <param name="y">The second register to compare</param>
+    private void SkipIfRegistersNotEqual(byte x, byte y)
+    {
+        if (V[x] != V[y])
+            PC += 2;
     }
 
     /// <summary>

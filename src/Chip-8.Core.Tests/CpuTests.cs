@@ -99,7 +99,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x2nnnn_CallsSubroutineAndReturns()
+    public void Set_0x2nnn_CallsSubroutineAndReturns()
     {
         var cpu = new Cpu();
 
@@ -112,6 +112,130 @@ public class CpuTests
         ClassicAssert.AreEqual(0x0398, cpu.PC);
 
         cpu.Step();
+        ClassicAssert.AreEqual(0x0202, cpu.PC);
+    }
+
+    [Test]
+    public void Set_0x3xnn_SkipsWhenEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0x99;
+
+        cpu.Memory[0x200] = 0x31;
+        cpu.Memory[0x201] = 0x99;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0204, cpu.PC);
+    }
+    
+    [Test]
+    public void Set_0x3xnn_ContinuesWhenNotEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[2] = 0x99;
+
+        cpu.Memory[0x200] = 0x32;
+        cpu.Memory[0x201] = 0x98;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0202, cpu.PC);
+    }
+
+    [Test]
+    public void Set_0x4xnn_SkipsWhenNotEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[3] = 0x99;
+
+        cpu.Memory[0x200] = 0x43;
+        cpu.Memory[0x201] = 0x98;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0204, cpu.PC);
+    }
+
+    [Test]
+    public void Set_0x4xnn_ContinuesWhenEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[4] = 0x99;
+
+        cpu.Memory[0x200] = 0x44;
+        cpu.Memory[0x201] = 0x99;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0202, cpu.PC);
+    }
+
+    [Test]
+    public void Set_0x5xy0_SkipsWhenEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[5] = 0x99;
+        cpu.V[6] = 0x99;
+
+        cpu.Memory[0x200] = 0x55;
+        cpu.Memory[0x201] = 0x60;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0204, cpu.PC);
+    }
+
+    [Test]
+    public void Set_0x5xy0_ContinuesWhenNotEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[7] = 0x99;
+        cpu.V[8] = 0x98;
+
+        cpu.Memory[0x200] = 0x57;
+        cpu.Memory[0x201] = 0x80;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0202, cpu.PC);
+    }
+
+    [Test]
+    public void Set_0x9xy0_SkipsWhenNotEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[5] = 0x99;
+        cpu.V[6] = 0x98;
+
+        cpu.Memory[0x200] = 0x95;
+        cpu.Memory[0x201] = 0x60;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x0204, cpu.PC);
+    }
+
+    [Test]
+    public void Set_0x9xy0_ContinuesWhenEqual()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[7] = 0x99;
+        cpu.V[8] = 0x99;
+
+        cpu.Memory[0x200] = 0x97;
+        cpu.Memory[0x201] = 0x80;
+
+        cpu.Step();
+
         ClassicAssert.AreEqual(0x0202, cpu.PC);
     }
 
