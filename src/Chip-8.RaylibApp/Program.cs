@@ -1,10 +1,12 @@
 ﻿using Chip8.Core;
 using Raylib_cs;
 
+const int TargetFPS = 60;
+const int StepsPerFrame = 12; // ~700 instructions/second at 60 FPS
 const int Scale = 10;
 
-Color CharcoalGray = Color.FromHSV(204, 0.316f, 0.310f);    // #36454F
-Color Gold = Color.FromHSV(51, 1.0f, 1.0f);                 // #FFD700
+Color CharcoalGray = new Color(0x36, 0x45, 0x4F);
+Color Gold = new Color(0xFF, 0xD7, 0x00);
 
 Color Background = CharcoalGray;
 Color Foreground = Gold;
@@ -54,34 +56,27 @@ void RunEmulator(string romPath)
     cpu.Load(romData);
 
     Raylib.InitWindow(Constants.DisplayWidth * Scale, Constants.DisplayHeight * Scale, "Chip-8");
-    Raylib.SetTargetFPS(30);
-
-    Raylib.BeginDrawing();
-    Raylib.ClearBackground(Background);
-    Raylib.EndDrawing();
+    Raylib.SetTargetFPS(TargetFPS);
 
     while (!Raylib.WindowShouldClose())
     {
-        cpu.Step();
+        for (var i = 0; i < StepsPerFrame; i++)
+            cpu.Step();
 
-        if (cpu.DisplayUpdated)
+        Raylib.BeginDrawing();
+        Raylib.ClearBackground(Background);
+
+        for (var x = 0; x < Constants.DisplayWidth; x++)
         {
-            Raylib.BeginDrawing();
-
-            Raylib.ClearBackground(Background);
-
-            for (var x = 0; x < Constants.DisplayWidth; x++)
+            for (var y = 0; y < Constants.DisplayHeight; y++)
             {
-                for (var y = 0; y < Constants.DisplayHeight; y++)
+                if (cpu.Display[x, y])
                 {
-                    if (cpu.Display[x, y])
-                    {
-                        Raylib.DrawRectangle(x * Scale, y * Scale, Scale, Scale, Foreground);
-                    }
+                    Raylib.DrawRectangle(x * Scale, y * Scale, Scale, Scale, Foreground);
                 }
             }
-
-            Raylib.EndDrawing();
         }
+
+        Raylib.EndDrawing();
     }
 }
