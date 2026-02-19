@@ -120,6 +120,9 @@ public class Cpu
                     case 0x2:
                         RegisterAnd(x, y);
                         break;
+                    case 0x3:
+                        RegisterXor(x, y);
+                        break;
                     default:
                         throw new InvalidOperationException($"Unknown opcode: {OpCode:x}");
                 }
@@ -263,11 +266,19 @@ public class Cpu
     }
 
     /// <summary>
-    /// VX = VX AND VY (opcode=8XY1).
+    /// VX = VX AND VY (opcode=8XY2).
     /// </summary>
     private void RegisterAnd(byte x, byte y)
     {
         V[x] &= V[y];
+    }
+
+    /// <summary>
+    /// VX = VX XOR VY (opcode=8XY3).
+    /// </summary>
+    private void RegisterXor(byte x, byte y)
+    {
+        V[x] ^= V[y];
     }
 
     /// <summary>
