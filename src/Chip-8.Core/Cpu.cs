@@ -126,6 +126,12 @@ public class Cpu
                     case 0x4:
                         RegisterAdd(x, y);
                         break;
+                    case 0x5:
+                        RegisterSubtractY(x, y);
+                        break;
+                    case 0x7:
+                        RegisterSubtractX(x, y);
+                        break;
                     default:
                         throw new InvalidOperationException($"Unknown opcode: {OpCode:x}");
                 }
@@ -293,6 +299,28 @@ public class Cpu
 
         V[0xF] = (V[y] > (0xFF - V[x])) ? (byte)1 : (byte)0;
         V[x] += V[y];
+    }
+
+    /// <summary>
+    /// VX = VX minus VY (opcode=8XY5).
+    /// </summary>
+    private void RegisterSubtractY(byte x, byte y)
+    {
+        // TODO: If either x or y equals 0xF it could result in subtle bugs.
+
+        V[0xF] = V[x] > V[y] ? (byte)1 : (byte)0;
+        V[x] = (byte)(V[x] - V[y]);
+    }
+
+    /// <summary>
+    /// VX = VY minus VX (opcode=8XY7).
+    /// </summary>
+    private void RegisterSubtractX(byte x, byte y)
+    {
+        // TODO: If either x or y equals 0xF it could result in subtle bugs.
+
+        V[0xF] = V[y] > V[x] ? (byte)1 : (byte)0;
+        V[x] = (byte)(V[y] - V[x]);
     }
 
     /// <summary>

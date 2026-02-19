@@ -360,6 +360,74 @@ public class CpuTests
     }
 
     [Test]
+    public void Step_0X8XY5_SubtractWithNoBorrow()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0x50;
+        cpu.V[2] = 0x20;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x25;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x30, cpu.V[1]);
+        ClassicAssert.AreEqual(0x1, cpu.V[0xF]);
+    }
+
+    [Test]
+    public void Step_0X8XY5_SubtractWithBorrow()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0x20;
+        cpu.V[2] = 0x50;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x25;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0xD0, cpu.V[1]);
+        ClassicAssert.AreEqual(0x0, cpu.V[0xF]);
+    }
+
+    [Test]
+    public void Step_0X8XY7_SubtractWithNoBorrow()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0x20;
+        cpu.V[2] = 0x50;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x27;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x30, cpu.V[1]);
+        ClassicAssert.AreEqual(0x1, cpu.V[0xF]);
+    }
+
+    [Test]
+    public void Step_0X8XY7_SubtractWithBorrow()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0x50;
+        cpu.V[2] = 0x20;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x27;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0xD0, cpu.V[1]);
+        ClassicAssert.AreEqual(0x0, cpu.V[0xF]);
+    }
+
+    [Test]
     public void Step_0x8F00_ThrowsException()
     {
         var cpu = new Cpu();
