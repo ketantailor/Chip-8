@@ -308,7 +308,7 @@ public class CpuTests
 
         ClassicAssert.AreEqual(0b_0010_0000, cpu.V[1]);
     }
-    
+
     [Test]
     public void Step_0x8xy3_Xor()
     {
@@ -323,6 +323,40 @@ public class CpuTests
         cpu.Step();
 
         ClassicAssert.AreEqual(0b_1001_1110, cpu.V[1]);
+    }
+
+    [Test]
+    public void Step_0x8xy4_AddWithCarry()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0xF0;
+        cpu.V[2] = 0x20;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x24;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0x10, cpu.V[1]);
+        ClassicAssert.AreEqual(0x1, cpu.V[0xF]);
+    }
+    
+    [Test]
+    public void Step_0x8xy4_AddWithNoCarry()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0xF0;
+        cpu.V[2] = 0x02;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x24;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0xF2, cpu.V[1]);
+        ClassicAssert.AreEqual(0x0, cpu.V[0xF]);
     }
 
     [Test]

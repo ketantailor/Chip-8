@@ -123,6 +123,9 @@ public class Cpu
                     case 0x3:
                         RegisterXor(x, y);
                         break;
+                    case 0x4:
+                        RegisterAdd(x, y);
+                        break;
                     default:
                         throw new InvalidOperationException($"Unknown opcode: {OpCode:x}");
                 }
@@ -279,6 +282,17 @@ public class Cpu
     private void RegisterXor(byte x, byte y)
     {
         V[x] ^= V[y];
+    }
+
+    /// <summary>
+    /// VX = VX plus VY (opcode=8XY4).
+    /// </summary>
+    private void RegisterAdd(byte x, byte y)
+    {
+        // TODO: If either x or y equals 0xF it could result in subtle bugs.
+
+        V[0xF] = (V[y] > (0xFF - V[x])) ? (byte)1 : (byte)0;
+        V[x] += V[y];
     }
 
     /// <summary>
