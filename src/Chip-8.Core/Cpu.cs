@@ -114,6 +114,9 @@ public class Cpu
                     case 0x0:
                         CopyToRegister(x, y);
                         break;
+                    case 0x1:
+                        RegisterOr(x, y);
+                        break;
                     default:
                         throw new InvalidOperationException($"Unknown opcode: {OpCode:x}");
                 }
@@ -246,6 +249,14 @@ public class Cpu
     private void CopyToRegister(byte x, byte y)
     {
         V[x] = V[y];
+    }
+
+    /// <summary>
+    /// VX = VX OR VY (opcode=8XY1).
+    /// </summary>
+    private void RegisterOr(byte x, byte y)
+    {
+        V[x] |= V[y];
     }
 
     /// <summary>
