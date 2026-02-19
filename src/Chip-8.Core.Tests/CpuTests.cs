@@ -294,6 +294,22 @@ public class CpuTests
     }
 
     [Test]
+    public void Step_0x8xy2_And()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0b_1010_1100;
+        cpu.V[2] = 0b_0011_0010;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x22;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0b_0010_0000, cpu.V[1]);
+    }
+
+    [Test]
     public void Step_0x8F00_ThrowsException()
     {
         var cpu = new Cpu();
