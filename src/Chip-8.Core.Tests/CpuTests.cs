@@ -428,6 +428,70 @@ public class CpuTests
     }
 
     [Test]
+    public void Step_0X8XY6_ShiftRightWithLsbSet()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0b_1010_1101;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x26;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0b_0101_0110, cpu.V[1]);
+        ClassicAssert.AreEqual(0x1, cpu.V[0xF]);
+    }
+
+    [Test]
+    public void Step_0X8XY6_ShiftRightWithLsbClear()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0b_1010_1100;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x26;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0b_0101_0110, cpu.V[1]);
+        ClassicAssert.AreEqual(0x0, cpu.V[0xF]);
+    }
+
+    [Test]
+    public void Step_0X8XYE_ShiftLeftWithMsbSet()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0b_1010_1100;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x2E;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0b_0101_1000, cpu.V[1]);
+        ClassicAssert.AreEqual(0x1, cpu.V[0xF]);
+    }
+
+    [Test]
+    public void Step_0X8XYE_ShiftLeftWithMsbClear()
+    {
+        var cpu = new Cpu();
+
+        cpu.V[1] = 0b_0010_1100;
+
+        cpu.Memory[0x200] = 0x81;
+        cpu.Memory[0x201] = 0x2E;
+
+        cpu.Step();
+
+        ClassicAssert.AreEqual(0b_0101_1000, cpu.V[1]);
+        ClassicAssert.AreEqual(0x0, cpu.V[0xF]);
+    }
+
+    [Test]
     public void Step_0x8F00_ThrowsException()
     {
         var cpu = new Cpu();

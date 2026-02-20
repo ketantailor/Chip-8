@@ -129,8 +129,14 @@ public class Cpu
                     case 0x5:
                         RegisterSubtractY(x, y);
                         break;
+                    case 0x6:
+                        ShiftRight(x);
+                        break;
                     case 0x7:
                         RegisterSubtractX(x, y);
+                        break;
+                    case 0xE:
+                        ShiftLeft(x);
                         break;
                     default:
                         throw new InvalidOperationException($"Unknown opcode: {OpCode:x}");
@@ -313,6 +319,15 @@ public class Cpu
     }
 
     /// <summary>
+    /// Shuift VX one to the right (opcode=8XY6).
+    /// </summary>
+    private void ShiftRight(byte x)
+    {
+        V[0xF] = (byte)(V[x] & 0x1);
+        V[x] >>= 0x1;
+    }
+
+    /// <summary>
     /// VX = VY minus VX (opcode=8XY7).
     /// </summary>
     private void RegisterSubtractX(byte x, byte y)
@@ -321,6 +336,15 @@ public class Cpu
 
         V[0xF] = V[y] > V[x] ? (byte)1 : (byte)0;
         V[x] = (byte)(V[y] - V[x]);
+    }
+
+    /// <summary>
+    /// Shuift VX one to the left (opcode=8XY6).
+    /// </summary>
+    private void ShiftLeft(byte x)
+    {
+        V[0xF] = (byte)((V[x] & 0x80) >> 7);
+        V[x] <<= 0x1;
     }
 
     /// <summary>
