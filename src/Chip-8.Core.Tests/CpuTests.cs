@@ -86,7 +86,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x1nnn_SetsPC()
+    public void Step_0X1NNN_SetsPC()
     {
         var cpu = new Cpu();
 
@@ -99,7 +99,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x2nnn_CallsSubroutineAndReturns()
+    public void Set_0X2NNN_CallsSubroutineAndReturns()
     {
         var cpu = new Cpu();
 
@@ -116,7 +116,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x3xnn_SkipsWhenEqual()
+    public void Set_0X3XNN_SkipsWhenEqual()
     {
         var cpu = new Cpu();
 
@@ -131,7 +131,7 @@ public class CpuTests
     }
     
     [Test]
-    public void Set_0x3xnn_ContinuesWhenNotEqual()
+    public void Set_0X3XNN_ContinuesWhenNotEqual()
     {
         var cpu = new Cpu();
 
@@ -146,7 +146,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x4xnn_SkipsWhenNotEqual()
+    public void Set_0X4XNN_SkipsWhenNotEqual()
     {
         var cpu = new Cpu();
 
@@ -161,7 +161,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x4xnn_ContinuesWhenEqual()
+    public void Set_0X4XNN_ContinuesWhenEqual()
     {
         var cpu = new Cpu();
 
@@ -176,7 +176,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x5xy0_SkipsWhenEqual()
+    public void Set_0X5XY0_SkipsWhenEqual()
     {
         var cpu = new Cpu();
 
@@ -192,7 +192,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x5xy0_ContinuesWhenNotEqual()
+    public void Set_0X5XY0_ContinuesWhenNotEqual()
     {
         var cpu = new Cpu();
 
@@ -208,7 +208,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x61nn_SetsRegister()
+    public void Step_0X61NN_SetsRegister()
     {
         var cpu = new Cpu();
 
@@ -221,7 +221,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x6Fnn_SetsRegister()
+    public void Step_0X6FNN_SetsRegister()
     {
         var cpu = new Cpu();
 
@@ -234,7 +234,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x71nn_AddsToRegister()
+    public void Step_0X71NN_AddsToRegister()
     {
         var cpu = new Cpu();
 
@@ -248,7 +248,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x7FnnWithOverflow_AddsToRegister()
+    public void Step_0X7FNN_AddsToRegisterWithOverflow()
     {
         var cpu = new Cpu();
 
@@ -262,7 +262,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x8xy0_CopiesToRegister()
+    public void Step_0X8XY0_CopiesToRegister()
     {
         var cpu = new Cpu();
 
@@ -278,7 +278,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x8xy1_Or()
+    public void Step_0X8XY1_Or()
     {
         var cpu = new Cpu();
 
@@ -294,7 +294,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x8xy2_And()
+    public void Step_0X8XY2_And()
     {
         var cpu = new Cpu();
 
@@ -310,7 +310,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x8xy3_Xor()
+    public void Step_0X8XY3_Xor()
     {
         var cpu = new Cpu();
 
@@ -326,7 +326,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0x8xy4_AddWithCarry()
+    public void Step_0X8XY4_AddWithCarry()
     {
         var cpu = new Cpu();
 
@@ -343,7 +343,7 @@ public class CpuTests
     }
     
     [Test]
-    public void Step_0x8xy4_AddWithNoCarry()
+    public void Step_0X8XY4_AddWithNoCarry()
     {
         var cpu = new Cpu();
 
@@ -439,7 +439,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x9xy0_SkipsWhenNotEqual()
+    public void Set_0X9XY0_SkipsWhenNotEqual()
     {
         var cpu = new Cpu();
 
@@ -455,7 +455,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Set_0x9xy0_ContinuesWhenEqual()
+    public void Set_0X9XY0_ContinuesWhenEqual()
     {
         var cpu = new Cpu();
 
@@ -471,7 +471,7 @@ public class CpuTests
     }
 
     [Test]
-    public void Step_0xAnnn_SetsI()
+    public void Step_0XANNN_SetsI()
     {
         var cpu = new Cpu();
 
